@@ -14,5 +14,5 @@ export interface IBookRepository {
   getBook(id: string): Promise<IBook>;
   getBooks(): Promise<IBook[]>;
   updateBook(book: IBook): Promise<IBook>;
-  deleteBook(id: string): void;
+  deleteBook(id: string): Promise<void>;
 }
