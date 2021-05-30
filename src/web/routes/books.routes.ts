@@ -54,82 +54,90 @@ router.get("/:id", async (req, res, next) => {
 });
 
 // создать книгу
-router.post("/create", fileMiddleware.single("fileBook"), async (req, res) => {
-  const { title, description, authors, favorite, fileCover } = req.body;
+router.post(
+  "/create",
+  fileMiddleware.single("fileBook"),
+  async (req, res, next) => {
+    const { title, description, authors, favorite, fileCover } = req.body;
 
-  let fileBook = "",
-    fileName = "";
-  if (req.file) {
-    const { path, filename } = req.file;
-    fileBook = path;
-    fileName = filename;
+    let fileBook = "",
+      fileName = "";
+    if (req.file) {
+      const { path, filename } = req.file;
+      fileBook = path;
+      fileName = filename;
+    }
+
+    try {
+      await repository.createBook({
+        title,
+        description,
+        authors,
+        favorite,
+        fileCover,
+        fileName,
+        fileBook,
+      });
+
+      res.json({
+        status: "ok",
+      });
+    } catch (err) {
+      console.log(err);
+      deleteFileFromDisk(fileBook);
+
+      res.json({
+        error: "Ошибка",
+        status: "error",
+      });
+    }
   }
-
-  try {
-    await repository.createBook({
-      title,
-      description,
-      authors,
-      favorite,
-      fileCover,
-      fileName,
-      fileBook,
-    });
-
-    res.json({
-      status: "ok",
-    });
-  } catch (err) {
-    console.log(err);
-    deleteFileFromDisk(fileBook);
-
-    res.json({
-      error: "Ошибка",
-      status: "error",
-    });
-  }
-});
+);
 
 // отреактировать книгу
-router.put("/:id", fileMiddleware.single("fileBook"), async (req, res) => {
-  const { id } = req.params;
-  const { title, description, authors, favorite, fileCover } = req.body;
+router.put(
+  "/:id",
+  fileMiddleware.single("fileBook"),
+  async (req, res, next) => {
+    const { id } = req.params;
+    const { title, description, authors, favorite, fileCover } = req.body;
 
-  let fileBook = "",
-    fileName = "";
-  if (req.file) {
-    const { path, filename } = req.file;
-    fileBook = path;
-    fileName = filename;
+    let fileBook = "",
+      fileName = "";
+    if (req.file) {
+      const { path, filename } = req.file;
+      fileBook = path;
+      fileName = filename;
+    }
+
+    try {
+      await repository.updateBook({
+        id,
+        title,
+        description,
+        authors,
+        favorite,
+        fileCover,
+        fileName,
+        fileBook,
+      });
+      res.json({
+        status: "ok",
+      });
+    } catch (err) {
+      console.log(err);
+      deleteFileFromDisk(fileBook);
+
+      res.json({
+        error: "Ошибка",
+        status: "error",
+      });
+    }
   }
-
-  try {
-    await repository.updateBook({
-      id,
-      title,
-      description,
-      authors,
-      favorite,
-      fileCover,
-      fileName,
-      fileBook,
-    });
-    res.json({
-      status: "ok",
-    });
-  } catch (err) {
-    console.log(err);
-    deleteFileFromDisk(fileBook);
-
-    res.json({
-      error: "Ошибка",
-      status: "error",
-    });
-  }
-});
+);
 
 // удалить книгу по id
-router.delete("/:id", async (req, res) => {
+router.delete("/:id", async (req, res, next) => {
   const { id } = req.params;
 
   try {
