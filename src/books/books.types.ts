@@ -9,7 +9,7 @@ export type IBook = {
   fileBook?: String;
 };
 
-export interface IBookRepository {
+export interface IBooksRepository {
   createBook(data: Omit<IBook, "id">): Promise<IBook>;
   getBook(id: string): Promise<IBook>;
   getBooks(): Promise<IBook[]>;

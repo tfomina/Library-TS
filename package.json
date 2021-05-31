@@ -1,5 +1,5 @@
 {
-  "name": "ts-template",
+  "name": "library-ts",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -9,25 +9,35 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/tfomina/TS-Template.git"
+    "url": "git+https://github.com/tfomina/Library-TS.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/tfomina/TS-Template/issues"
+    "url": "https://github.com/tfomina/Library-TS/issues"
   },
-  "homepage": "https://github.com/tfomina/TS-Template#readme",
+  "homepage": "https://github.com/tfomina/Library-TS#readme",
   "devDependencies": {
-    "@types/node": "^15.3.0",
-    "@typescript-eslint/eslint-plugin": "^4.23.0",
-    "@typescript-eslint/parser": "^4.23.0",
-    "eslint": "^7.26.0",
+    "@types/express": "^4.17.12",
+    "@types/multer": "^1.4.5",
+    "@types/node": "^15.6.1",
+    "@typescript-eslint/eslint-plugin": "^4.25.0",
+    "@typescript-eslint/parser": "^4.25.0",
+    "eslint": "^7.27.0",
     "eslint-config-airbnb-base": "^14.2.1",
-    "eslint-plugin-import": "^2.23.2",
+    "eslint-plugin-import": "^2.23.4",
     "eslint-plugin-optimize-regex": "^1.2.0",
     "eslint-plugin-promise": "^5.1.0",
     "eslint-plugin-sonarjs": "^0.7.0",
-    "typescript": "^4.2.4"
+    "typescript": "^4.3.2"
+  },
+  "dependencies": {
+    "express": "^4.17.1",
+    "inversify": "^5.1.1",
+    "mongoose": "^5.12.12",
+    "multer": "^1.4.2",
+    "nanoid": "^3.1.23",
+    "reflect-metadata": "^0.1.13"
   }
 }
