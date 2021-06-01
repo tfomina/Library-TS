@@ -1,4 +1,4 @@
-import express from "express";
+import express, { Request, Response, NextFunction } from "express";
 import { container } from "../../infrastructure/container";
 import { BooksRepository } from "../../books/books.repository";
 import { fileMiddleware } from "../middlewares/file";
@@ -8,7 +8,7 @@ const router = express.Router();
 const repository = container.get(BooksRepository);
 
 // получить все книги
-router.get("/", async (req, res, next) => {
+router.get("/", async (req: Request, res: Response, next: NextFunction) => {
   try {
     const books = await repository.getBooks();
 
@@ -27,7 +27,7 @@ router.get("/", async (req, res, next) => {
 });
 
 // получить книгу по id
-router.get("/:id", async (req, res, next) => {
+router.get("/:id", async (req: Request, res: Response, next: NextFunction) => {
   const { id } = req.params;
   try {
     const book = await repository.getBook(id);
@@ -57,7 +57,7 @@ router.get("/:id", async (req, res, next) => {
 router.post(
   "/create",
   fileMiddleware.single("fileBook"),
-  async (req, res, next) => {
+  async (req: Request, res: Response, next: NextFunction) => {
     const { title, description, authors, favorite, fileCover } = req.body;
 
     let fileBook = "",
@@ -98,7 +98,7 @@ router.post(
 router.put(
   "/:id",
   fileMiddleware.single("fileBook"),
-  async (req, res, next) => {
+  async (req: Request, res: Response, next: NextFunction) => {
     const { id } = req.params;
     const { title, description, authors, favorite, fileCover } = req.body;
 
@@ -137,29 +137,32 @@ router.put(
 );
 
 // удалить книгу по id
-router.delete("/:id", async (req, res, next) => {
-  const { id } = req.params;
+router.delete(
+  "/:id",
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { id } = req.params;
 
-  try {
-    const book = await repository.getBook(id);
+    try {
+      const book = await repository.getBook(id);
 
-    if (book) {
-      // удаление файла книги
-      const { fileBook } = book;
-      deleteFileFromDisk(fileBook as string);
+      if (book) {
+        // удаление файла книги
+        const { fileBook } = book;
+        deleteFileFromDisk(fileBook as string);
+      }
+
+      await repository.deleteBook(id);
+
+      res.json({
+        status: "ok",
+      });
+    } catch (err) {
+      console.log(err);
+
+      res.json({
+        error: "Ошибка",
+        status: "error",
+      });
     }
-
-    await repository.deleteBook(id);
-
-    res.json({
-      status: "ok",
-    });
-  } catch (err) {
-    console.log(err);
-
-    res.json({
-      error: "Ошибка",
-      status: "error",
-    });
   }
-});
+);
